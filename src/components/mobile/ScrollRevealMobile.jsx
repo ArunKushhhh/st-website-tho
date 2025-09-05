@@ -163,7 +163,7 @@ function ScrollRevealMobile({
 
   return (
     <div ref={ref} className="relative w-full">
-      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-sm -left-4 top-6">st opportunities</div>
+      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-xs -left-4 top-6">st opportunities</div>
 
       <div
         className="logo-container group cursor-pointer relative flex flex-col mt-10 items-center"

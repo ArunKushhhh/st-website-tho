@@ -750,7 +750,7 @@ const StudentBeast = () => {
       id="beast"
     >
       {gradientBg}
-      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-sm left-0 top-6">
+      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-xs left-0 top-6">
         st beast
       </div>
 

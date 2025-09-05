@@ -78,7 +78,7 @@ const St2MobileGallery = ({ images }) => {
       ref={containerRef}
       className="lg:-pt-[30px]  h-auto bg-white relative flex flex-col items-center w-full"
     >
-      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-sm left-0 top-6">st School</div>
+      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-xs left-0 top-6">st School</div>
       {isReady && (
         <div className="sticky top-[0%] lg:-top-[20px]  h-auto flex flex-col items-center justify-center px-4 overflow-visible w-[100%] max-w-[1600px]">
           {/* <div className="h-[20%]"></div> */}

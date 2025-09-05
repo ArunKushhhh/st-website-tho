@@ -559,7 +559,7 @@ export default function StudentApp() {
       className="min-h-screen w-full overflow-hidden relative"
       style={backgroundStyle}
     >
-      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-sm left-0 top-6">st School</div>
+      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-xs left-0 top-6">st student</div>
 
       {/* Header */}
       <header className="relative z-20 pt-8 md:pt-16 text-center">
@@ -590,7 +590,7 @@ export default function StudentApp() {
 
       {/* Main Content */}
       <main
-        className="relative z-20 px-4 sm:px-6 md:px-8 transition-transform duration-500"
+        className="relative z-20 px-4 sm:px-6 md:px-8 transition-transform duration-500 pb-6"
         style={{ transform: showButtons ? "translateY(60px)" : "translateY(0)" }}
       >
         {/* Title */}
@@ -628,15 +628,15 @@ export default function StudentApp() {
                 {renderMobileCard(
                   "topRight", 
                   "Your Dost AI",
-                  <div className="flex-1 flex items-end gap-2">
+                  <div className="flex justify-between items-end">
                     <img
                       src={robot}
                       alt="Your Dost AI"
-                      className="w-18 sm:w-12 h-16 sm:h-12 object-contain flex-shrink-0"
+                      className="w-18 sm:w-12 h-16 sm:h-12 object-contain flex-shrink-0 -ml-4"
                       loading="lazy"
                     />
                     <p className="text-white/90 text-xs sm:text-[10px] leading-tight text-center">
-                      Your <span className="font-bold">AI buddy</span> for everything â€" from silly questions to serious career advice
+                      Your <span className="font-bold">AI buddy</span> for everything from silly questions to serious career advice
                     </p>
                   </div>,
                   "h-[130px] sm:h-[150px] p-2 sm:p-3 flex flex-col"

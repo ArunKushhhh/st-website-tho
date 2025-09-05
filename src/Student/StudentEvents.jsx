@@ -272,7 +272,7 @@ const renderNavigationButton = useCallback(
       className="min-h-screen bg-rose-100 relative px-4 "
       onClick={handleBackgroundClick}
     >
-      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-sm left-0 top-6">st opportunities</div>
+      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-xs left-0 top-6">st events</div>
 
       {/* Desktop Modal */}
       {modalImage && !isMobile && (

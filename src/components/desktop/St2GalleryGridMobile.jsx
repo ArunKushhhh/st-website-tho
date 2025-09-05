@@ -50,7 +50,7 @@ const St2GalleryGridMobile = ({ images, showButtons }) => {
 
       {/* Simple Explore Button */}
       <div className="text-center">
-        <button className="bg-gradient-to-r from-red-700 to-red-950 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-full font-medium flex items-center justify-center gap-2 transition-all duration-300 text-sm shadow-lg mx-auto">
+        <button className="bg-gradient-to-r from-red-700 to-red-950 hover:from-red-700 hover:to-red-800 text-white px-8 py-3 rounded-full font-semibold flex items-center justify-center gap-2 transition-all duration-300 text-lg shadow-lg mx-auto">
           Explore
           <ArrowRight className="w-4 h-4" />
         </button>

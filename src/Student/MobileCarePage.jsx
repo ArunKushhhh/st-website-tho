@@ -260,8 +260,8 @@ const MobileCarePage = () => {
       }}
       id="care"
     >
-      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-sm left-0 top-6">
-        st school
+      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-xs left-0 top-6">
+        st care
       </div>
       {/* Background Design Elements */}
       <div className="absolute inset-0">
@@ -312,7 +312,7 @@ const MobileCarePage = () => {
         </div>
 
         {/* Main Content */}
-        <div className="transition-transform duration-500">
+        <div className="transition-transform duration-500 translate-y-26">
           <div className="text-center mb-4">
             <h1
               ref={refs.heading}

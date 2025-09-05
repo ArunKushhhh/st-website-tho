@@ -55,7 +55,7 @@ function StAnimation1() {
   };
 
   return (
-    <div id="opportunities" className="flex flex-col w-full px-4 pb-32">
+    <div id="opportunities" className="flex flex-col w-full px-4 pb-20">
       {isMobile ? (
         <SafeScrollRevealMobile {...sharedProps}>
           <h2 className="text-lg font-bold md:text-xl">Job Opening</h2>

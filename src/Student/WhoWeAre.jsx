@@ -286,8 +286,8 @@ function WhoweAre() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-sm left-0 top-6">
-        st school
+      <div className="absolute uppercase px-4 py-1 bg-gray-800 text-white font-semibold text-xs left-0 top-6">
+        st community
       </div>
       {/* Banner image top-right */}
       {/* <img
@@ -356,7 +356,7 @@ function WhoweAre() {
         <div
           className="flex flex-col items-center justify-center text-center space-y-4 sm:space-y-6 md:space-y-10 flex-grow transition-transform duration-500"
           style={{
-            transform: showButtons ? "translateY(80px)" : "translateY(0)",
+            transform: showButtons ? "translateY(20px)" : "translateY(0)",
           }}
         >
           {/* Typewriter Text Above Number */}
