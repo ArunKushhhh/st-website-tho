@@ -283,7 +283,7 @@ const renderNavigationButton = useCallback(
 
         {/* Secondary Text */}
         <motion.p
-          className="text-white text-lg sm:text-xl mt-10 drop-shadow-md"
+          className="text-white text-base sm:text-xl mt-10 drop-shadow-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: -30 }}
         >

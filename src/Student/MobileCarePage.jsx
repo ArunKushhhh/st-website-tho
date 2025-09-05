@@ -316,7 +316,7 @@ const MobileCarePage = () => {
           <div className="text-center mb-4">
             <h1
               ref={refs.heading}
-              className="text-2xl font-bold text-gray-800 mb-2 text-center"
+              className="text-2xl font-extrabold text-gray-800 mb-2 text-center"
             >
               Feeling Stuck?
             </h1>

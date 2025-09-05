@@ -329,7 +329,7 @@ const renderNavigationButton = useCallback(
         >
           {/* Heading */}
           <div ref={textContentRef} className="text-center mb-3">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4">
               Say Goodbye to FOMO. Step Into the Action.
             </h1>
           </div>

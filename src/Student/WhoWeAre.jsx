@@ -362,7 +362,7 @@ function WhoweAre() {
           {/* Typewriter Text Above Number */}
           <div
             ref={typewriter1Ref}
-            className="text-white text-lg sm:text-xl md:text-4xl lg:text-6xl font-bold tracking-wide"
+            className="text-white text-2xl sm:text-xl md:text-4xl lg:text-6xl font-extrabold tracking-wide"
           >
             {typewriterText1}
             <span className="animate-pulse text-red-400">|</span>
@@ -402,7 +402,7 @@ function WhoweAre() {
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <div
                 ref={typewriter2Ref}
-                className="text-white text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold"
+                className="text-white text-2xl sm:text-2xl md:text-3xl lg:text-5xl font-extrabold"
               >
                 {typewriterText2}
                 {typewriterText2 &&
@@ -413,7 +413,7 @@ function WhoweAre() {
               </div>
               <div
                 ref={typewriter3Ref}
-                className="text-red-300 text-lg sm:text-xl md:text-2xl lg:text-4xl font-medium"
+                className="text-red-300 text-xl sm:text-xl md:text-2xl lg:text-4xl font-medium"
               >
                 {typewriterText3}
                 {typewriterText3 && typewriterText3.length > 0 && (
@@ -428,13 +428,13 @@ function WhoweAre() {
             ref={textContentRef}
             className="text-white space-y-3 sm:space-y-4 md:space-y-6 max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-4xl px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8"
           >
-            <div className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
+            <div className="text-base sm:text-base md:text-lg lg:text-xl leading-relaxed">
               We are India's largest and fastest growing student community,
               connecting <span className="text-red-300 font-bold">25,000+</span>{" "}
               students across the nation through innovative platforms and
               experiences.
             </div>
-            <div className="text-xs sm:text-sm md:text-base lg:text-lg text-red-200">
+            <div className="text-sm sm:text-sm md:text-base lg:text-lg text-red-200">
               Join thousands of students who are already part of our vibrant
               ecosystem.
             </div>

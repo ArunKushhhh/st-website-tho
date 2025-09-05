@@ -390,7 +390,7 @@ const StudentCare = () => {
             <div className="flex-1 text-left ">
               <h1
                 ref={headingRef}
-                className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800 mb-4"
+                className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-gray-800 mb-4"
               >
                 Feeling Stuck?
               </h1>

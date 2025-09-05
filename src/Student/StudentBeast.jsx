@@ -484,7 +484,7 @@ const NavigationHeader = ({
 // Content sections
 const ContentSection = ({ title, children, className = "" }) => (
   <div className={`text-center text-white ${className}`}>
-    <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2 text-white px-4">
+    <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold mb-2 text-white px-4">
       {title}
     </h1>
     {children}

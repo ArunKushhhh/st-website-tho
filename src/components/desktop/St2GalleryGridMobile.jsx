@@ -13,13 +13,13 @@ const St2GalleryGridMobile = ({ images, showButtons }) => {
     >
       {/* Simple Heading Section */}
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-black mb-4">
+        <h1 className="text-2xl font-extrabold text-black mb-4">
           Discover career paths you never know!
         </h1>
-        <p className="text-sm font-medium text-gray-700 leading-relaxed mb-2">
+        <p className="text-base font-medium text-gray-700 leading-relaxed mb-2">
           Workshops that don't bore. Webinars with no-zoom fatigue.
         </p>
-        <p className="text-sm font-medium text-gray-700 leading-relaxed">
+        <p className="text-base font-medium text-gray-700 leading-relaxed">
           Courses that actually upskill. Dive into learning with vibe
         </p>
       </div>

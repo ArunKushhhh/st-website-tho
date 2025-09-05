@@ -594,8 +594,8 @@ export default function StudentApp() {
         style={{ transform: showButtons ? "translateY(60px)" : "translateY(0)" }}
       >
         {/* Title */}
-        <section className="text-center mb-8 md:mb-12">
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-6 leading-tight px-4">
+        <section className="text-center mb-8 mt-4 md:mb-12">
+          <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-6 leading-tight px-4">
             Where Fun Meets Learning and New
             <br className="hidden sm:block" />
             <span className="sm:hidden"> </span>Connections

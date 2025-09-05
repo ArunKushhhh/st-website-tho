@@ -215,9 +215,9 @@ function ScrollRevealMobile({
       <motion.div style={{ y: exitY }} className="">
         {/* Logo and Navigation Buttons */}
 
-        <motion.div className="w-full flex flex-col gap-2 items-center text-white text-center mt-4">
-          <div className="text-xl font-semibold">Find it all here!</div>
-          <p className="max-w-sm font-medium">
+        <motion.div className="w-full flex flex-col gap-2 items-center text-white text-center mt-8">
+          <div className="text-2xl font-extrabold">Find it all here!</div>
+          <p className="max-w-sm text-base">
             Discover opportunities that give you real exposure, help you grow
             new skills, and lead you toward meaningful roles where your effort
             turns into pride and recognition.{" "}

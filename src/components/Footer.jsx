@@ -82,7 +82,7 @@ export default function Footer() {
         >
           {/* Left side - Main headline and button */}
           <div className="flex-1 lg:flex-[0.4] mb-8 lg:mb-0 flex flex-col justify-start z-10">
-            <h2 className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold mb-6 leading-tight">
+            <h2 className="text-white text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold mb-6 leading-tight">
               {isBrandsRoute ? (
                 <>
                   Be the Brand<br />
