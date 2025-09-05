@@ -107,7 +107,7 @@ function BrandsLayout() {
       `}</style>
 
       {/* Mobile Header */}
-      <div className="lg:hidden absolute top-4 left-0 right-0 z-30">
+      <div className="lg:hidden absolute top-42 left-0 right-0 z-30">
         <div className="flex relative justify-center">
           <div className="flex flex-col items-center pb-4 gap-3">
             <motion.div
@@ -124,13 +124,13 @@ function BrandsLayout() {
             </motion.div>
             
             <motion.div
-              className="bg-[#2d000a] backdrop-blur-sm rounded-full p-1 flex shadow-xl w-[300px] max-w-[90vw] h-[40px]"
+              className="bg-[#2d000a] backdrop-blur-sm rounded-full flex shadow-xl w-[90vw] h-[50px]"
               initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
               <button
-                className={`flex-1 font-medium transition-all duration-300 rounded-full text-sm ${
+                className={`flex-1 font-medium transition-all duration-300 rounded-full text-xl ${
                   hoveredButton === 'students'
                     ? 'bg-gradient-to-r from-[#b8001f] to-[#7a0015] text-white'
                     : 'text-gray-300 hover:text-white'
@@ -140,7 +140,7 @@ function BrandsLayout() {
                 Students
               </button>
               <button
-                className={`flex-1 font-medium rounded-full text-sm transition-all duration-300 ${
+                className={`flex-1 font-medium rounded-full text-xl transition-all duration-300 ${
                   hoveredButton === 'brands'
                     ? 'bg-gradient-to-r from-[#b8001f] to-[#7a0015] text-white'
                     : 'text-gray-300 hover:text-white'
