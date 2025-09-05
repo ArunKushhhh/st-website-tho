@@ -32,7 +32,12 @@ const ANIMATION_CONFIG = {
     SLIDE: 500,
     CARD_SCALE: 0.8,
     PHONE_SLIDE: 1.2,
-    CONTENT_SLIDE: 1.0
+    CONTENT_SLIDE: 1.0,
+    MOBILE_CARD: 0.8
+  },
+  MOBILE_ANIMATIONS: {
+    OFFSET: 50,
+    STAGGER: 0.2
   }
 };
 
@@ -41,8 +46,6 @@ const BREAKPOINTS = {
 };
 
 // Optimized CardSlider Component
-// Fixed CardSlider Component - Replace the existing CardSlider in your code
-
 const CardSlider = React.memo(({ 
   cards, 
   className = "", 
@@ -235,7 +238,6 @@ export default function StudentApp() {
   const [hoveredButton, setHoveredButton] = useState(NAVIGATION.STUDENTS);
   const [isMobile, setIsMobile] = useState(window.innerWidth < BREAKPOINTS.MOBILE);
 
-
   useEffect(() => {
     if (isMobile) {
       setShowButtons(true);
@@ -326,20 +328,76 @@ export default function StudentApp() {
 
   // Animation functions
   const runMobileAnimation = useCallback(() => {
-  // ❌ No animations for mobile
-  const mobileElements = Object.values(refs.mobile)
-    .map(ref => ref.current)
-    .filter(Boolean);
+    const mobileElements = Object.values(refs.mobile)
+      .map(ref => ref.current)
+      .filter(Boolean);
 
-  if (mobileElements.length === 0) return;
+    if (mobileElements.length === 0) return;
 
-  // Just set them visible instantly
-  gsap.set(mobileElements, {
-    scale: 1,
-    opacity: 1,
-    transformOrigin: "center center",
-  });
-}, []);
+    // Kill any existing animations first
+    gsap.killTweensOf(mobileElements);
+    if (refs.phone.current) {
+      gsap.killTweensOf(refs.phone.current);
+    }
+
+    // Set initial states for mobile cards
+    gsap.set(refs.mobile.topLeft.current, { 
+      x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
+      opacity: 0 
+    });
+    gsap.set(refs.mobile.topRight.current, { 
+      x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
+      opacity: 0 
+    });
+    gsap.set(refs.mobile.bottomLeft.current, { 
+      x: ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
+      opacity: 0 
+    });
+    gsap.set(refs.mobile.bottomRight.current, { 
+      x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
+      opacity: 0 
+    });
+
+    // Create timeline for mobile animations
+    const tl = gsap.timeline();
+
+    // Animate cards with stagger
+    tl.to(refs.mobile.topLeft.current, {
+      x: 0,
+      opacity: 1,
+      duration: ANIMATION_CONFIG.DURATIONS.MOBILE_CARD,
+      ease: "power3.out"
+    })
+    .to(refs.mobile.topRight.current, {
+      x: 0,
+      opacity: 1,
+      duration: ANIMATION_CONFIG.DURATIONS.MOBILE_CARD,
+      ease: "power3.out"
+    }, `-=${ANIMATION_CONFIG.DURATIONS.MOBILE_CARD - ANIMATION_CONFIG.MOBILE_ANIMATIONS.STAGGER}`)
+    .to(refs.mobile.bottomLeft.current, {
+      x: 0,
+      opacity: 1,
+      duration: ANIMATION_CONFIG.DURATIONS.MOBILE_CARD,
+      ease: "power3.out"
+    }, `-=${ANIMATION_CONFIG.DURATIONS.MOBILE_CARD - ANIMATION_CONFIG.MOBILE_ANIMATIONS.STAGGER}`)
+    .to(refs.mobile.bottomRight.current, {
+      x: 0,
+      opacity: 1,
+      duration: ANIMATION_CONFIG.DURATIONS.MOBILE_CARD,
+      ease: "power3.out"
+    }, `-=${ANIMATION_CONFIG.DURATIONS.MOBILE_CARD - ANIMATION_CONFIG.MOBILE_ANIMATIONS.STAGGER}`);
+
+    // Animate phone if present
+    if (refs.phone.current) {
+      gsap.set(refs.phone.current, { opacity: 0, y: 50 });
+      tl.to(refs.phone.current, {
+        opacity: 1,
+        y: 0,
+        duration: ANIMATION_CONFIG.DURATIONS.PHONE_SLIDE,
+        ease: "power3.out"
+      }, `-=${ANIMATION_CONFIG.DURATIONS.MOBILE_CARD - 0.3}`);
+    }
+  }, []);
 
   const runDesktopAnimation = useCallback(() => {
     const { cards, backgrounds, content } = refs.desktop;
@@ -442,82 +500,94 @@ export default function StudentApp() {
   }, []);
 
   useEffect(() => {
-  if (!containerRef.current) return;
+    if (!containerRef.current) return;
 
-  if (isMobile) {
-    // On mobile: make everything visible, no animation
-    const mobileElements = Object.values(refs.mobile)
-      .map(ref => ref.current)
-      .filter(Boolean);
+    if (isMobile) {
+      // Set initial states for mobile cards
+      const mobileElements = Object.values(refs.mobile)
+        .map(ref => ref.current)
+        .filter(Boolean);
 
-    if (mobileElements.length > 0) {
-      gsap.set(mobileElements, {
-        scale: 1,
-        opacity: 1,
-        transformOrigin: "center center",
+      if (mobileElements.length > 0) {
+        // Set initial positions (will be animated by scroll trigger)
+        gsap.set(refs.mobile.topLeft.current, { 
+          x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
+          opacity: 0 
+        });
+        gsap.set(refs.mobile.topRight.current, { 
+          x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
+          opacity: 0 
+        });
+        gsap.set(refs.mobile.bottomLeft.current, { 
+          x: ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
+          opacity: 0 
+        });
+        gsap.set(refs.mobile.bottomRight.current, { 
+          x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
+          opacity: 0 
+        });
+      }
+
+      if (refs.phone.current) {
+        gsap.set(refs.phone.current, { opacity: 0, y: 50 });
+      }
+
+      // Create ScrollTrigger for mobile
+      const mobileScrollTrigger = ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: ANIMATION_CONFIG.SCROLL_START,
+        end: ANIMATION_CONFIG.SCROLL_END,
+        onEnter: runMobileAnimation,
+        onEnterBack: runMobileAnimation,
       });
+
+      return () => {
+        mobileScrollTrigger.kill();
+        if (hideButtonsTimeoutRef.current) {
+          clearTimeout(hideButtonsTimeoutRef.current);
+        }
+      };
     }
+
+    // --- Desktop setup (unchanged) ---
+    const { cards, backgrounds, content } = refs.desktop;
 
     if (refs.phone.current) {
-      gsap.set(refs.phone.current, { opacity: 1, y: 0 });
+      gsap.set(refs.phone.current, { opacity: 0, y: 200 });
     }
 
-    const { cards, backgrounds, content } = refs.desktop;
-    const allDesktopEls = [
-      ...Object.values(cards),
-      ...Object.values(backgrounds),
-      ...Object.values(content),
-    ]
-      .map(ref => ref.current)
-      .filter(Boolean);
+    const cardElements = Object.values(cards).map(ref => ref.current).filter(Boolean);
+    const bgElements = Object.values(backgrounds).map(ref => ref.current).filter(Boolean);
+    const contentElements = Object.values(content).map(ref => ref.current).filter(Boolean);
 
-    if (allDesktopEls.length > 0) {
-      gsap.set(allDesktopEls, { opacity: 1, scale: 1, x: 0, y: 0 });
-    }
+    if (cardElements.length > 0) gsap.set(cardElements, { opacity: 0 });
+    if (bgElements.length > 0) gsap.set(bgElements, { scale: 0 });
+    if (contentElements.length > 0) gsap.set(contentElements, { opacity: 0 });
 
-    return; // ✅ skip scroll trigger setup for mobile
-  }
+    const scrollTrigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: ANIMATION_CONFIG.SCROLL_START,
+      end: ANIMATION_CONFIG.SCROLL_END,
+      onEnter: runDesktopAnimation,
+      onEnterBack: runDesktopAnimation,
+    });
 
-  // --- Desktop setup (unchanged) ---
-  const { cards, backgrounds, content } = refs.desktop;
+    const handleAnimationTrigger = (event) => {
+      if (event.detail?.sectionName === "app") {
+        setTimeout(runDesktopAnimation, 100);
+      }
+    };
 
-  if (refs.phone.current) {
-    gsap.set(refs.phone.current, { opacity: 0, y: 200 });
-  }
+    window.addEventListener("triggerSectionAnimation", handleAnimationTrigger);
 
-  const cardElements = Object.values(cards).map(ref => ref.current).filter(Boolean);
-  const bgElements = Object.values(backgrounds).map(ref => ref.current).filter(Boolean);
-  const contentElements = Object.values(content).map(ref => ref.current).filter(Boolean);
-
-  if (cardElements.length > 0) gsap.set(cardElements, { opacity: 0 });
-  if (bgElements.length > 0) gsap.set(bgElements, { scale: 0 });
-  if (contentElements.length > 0) gsap.set(contentElements, { opacity: 0 });
-
-  const scrollTrigger = ScrollTrigger.create({
-    trigger: containerRef.current,
-    start: ANIMATION_CONFIG.SCROLL_START,
-    end: ANIMATION_CONFIG.SCROLL_END,
-    onEnter: runDesktopAnimation,
-    onEnterBack: runDesktopAnimation,
-  });
-
-  const handleAnimationTrigger = (event) => {
-    if (event.detail?.sectionName === "app") {
-      setTimeout(runDesktopAnimation, 100);
-    }
-  };
-
-  window.addEventListener("triggerSectionAnimation", handleAnimationTrigger);
-
-  return () => {
-    scrollTrigger.kill();
-    window.removeEventListener("triggerSectionAnimation", handleAnimationTrigger);
-    if (hideButtonsTimeoutRef.current) {
-      clearTimeout(hideButtonsTimeoutRef.current);
-    }
-  };
-}, [isMobile, runDesktopAnimation]);
-
+    return () => {
+      scrollTrigger.kill();
+      window.removeEventListener("triggerSectionAnimation", handleAnimationTrigger);
+      if (hideButtonsTimeoutRef.current) {
+        clearTimeout(hideButtonsTimeoutRef.current);
+      }
+    };
+  }, [isMobile, runDesktopAnimation, runMobileAnimation]);
 
   // Render helpers
   const renderNavigationButton = useCallback(
@@ -660,20 +730,20 @@ export default function StudentApp() {
 
             {/* Bottom Full Width Card - Gigs & Star Connects */}
             <div className="w-full">
-  {renderMobileCard(
-    "bottomRight",
-    "Gigs & Star Connects",
-    <div className="w-full h-[280px] sm:h-[320px] flex items-center justify-center overflow-hidden rounded-xl">
-      <CardSlider
-        cards={cardData.gigs}
-        className="w-full h-full"
-        autoSlideInterval={ANIMATION_CONFIG.AUTO_SLIDE_INTERVALS.GIGS}
-        layout="image-title-text"
-      />
-    </div>,
-    "h-[300px] sm:h-[420px] p-3 sm:p-4 flex flex-col" // Increased height
-  )}
-</div>
+              {renderMobileCard(
+                "bottomRight",
+                "Gigs & Star Connects",
+                <div className="w-full h-[280px] sm:h-[320px] flex items-center justify-center overflow-hidden rounded-xl">
+                  <CardSlider
+                    cards={cardData.gigs}
+                    className="w-full h-full"
+                    autoSlideInterval={ANIMATION_CONFIG.AUTO_SLIDE_INTERVALS.GIGS}
+                    layout="image-title-text"
+                  />
+                </div>,
+                "h-[300px] sm:h-[420px] p-3 sm:p-4 flex flex-col" // Increased height
+              )}
+            </div>
           </section>
         )}
 
@@ -682,6 +752,7 @@ export default function StudentApp() {
           <section className="mb-12 md:mb-16">
             <div className="flex justify-center">
               <img
+                ref={refs.phone}
                 src={iphone}
                 alt="iPhone Mockup"
                 className="w-[280px] sm:w-[360px] md:w-[400px] h-auto drop-shadow-2xl"
