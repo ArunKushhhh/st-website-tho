@@ -97,7 +97,7 @@ function Home() {
             Whether you're targeting one neighborhood or the entire country, we
             build campaigns that grow with you — meaningfully and measurably.
           </p>
-          <button className="bg-[#b8001f] hover:bg-[#9a0019] text-lg sm:text-base sm:mb-8 text-white font-semibold px-6 py-3 sm:px-8 sm:py-4 rounded-full transition-all duration-300 hover:scale-105 shadow-xl items-end self-end mt-24">
+          <button className="bg-[#b8001f] hover:bg-[#9a0019] text-lg sm:text-base sm:mb-8 text-white font-semibold px-6 py-3 sm:px-8 sm:py-4 rounded-full transition-all duration-300 hover:scale-105 shadow-xl items-end self-center mt-24">
             Explore More →
           </button>
         </div>
