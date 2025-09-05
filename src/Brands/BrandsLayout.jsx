@@ -109,7 +109,7 @@ function BrandsLayout() {
       {/* Mobile Header */}
       <div className="lg:hidden absolute top-32 sm:top-16 left-0 right-0 z-30">
         <div className="flex relative justify-center">
-          <div className="flex flex-col items-center pb-4 gap-3">
+          <div className="flex flex-col items-center pb-4 gap-6">
             <motion.div
               className="flex flex-col items-center"
               initial={{ scale: 2, y: 50 }}
@@ -124,7 +124,7 @@ function BrandsLayout() {
             </motion.div>
             
             <motion.div
-              className="bg-[#2d000a] backdrop-blur-sm rounded-full flex shadow-xl w-[90vw] sm:max-w-[400px] h-[50px]"
+              className="flex justify-center bg-[#2d000a] rounded-full shadow-xl w-[400px] max-w-[90vw] h-[50px] mx-auto"
               initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
