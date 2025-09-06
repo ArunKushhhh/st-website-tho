@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion } from "framer-motion";
 
 // Assets
 import stlogo from "../assets/Whitelogo.webp";
@@ -13,8 +12,6 @@ import quizImg4 from "../assets/stApp/image 274.svg";
 import gigsImg from "../assets/stApp/image 273.svg";
 import gigsImg2 from "../assets/stApp/image 2712.svg";
 
-gsap.registerPlugin(ScrollTrigger);
-
 // Constants
 const NAVIGATION = {
   STUDENTS: "students",
@@ -22,8 +19,6 @@ const NAVIGATION = {
 };
 
 const ANIMATION_CONFIG = {
-  SCROLL_START: "top 80%",
-  SCROLL_END: "bottom 20%",
   AUTO_SLIDE_INTERVALS: {
     QUIZ: 2000,
     GIGS: 2500
@@ -58,8 +53,8 @@ const CardSlider = React.memo(({
   const [dragStart, setDragStart] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   
-  const containerRef = useRef(null);
-  const autoSlideRef = useRef(null);
+  const containerRef = React.useRef(null);
+  const autoSlideRef = React.useRef(null);
 
   // Memoized handlers
   const nextSlide = useCallback(() => {
@@ -245,39 +240,7 @@ export default function StudentApp() {
   }, [isMobile]);
 
   // Refs
-  const containerRef = useRef(null);
-  const hideButtonsTimeoutRef = useRef(null);
-  
-  // Animation refs - organized by layout
-  const refs = {
-    phone: useRef(null),
-    mobile: {
-      topLeft: useRef(null),
-      topRight: useRef(null),
-      bottomLeft: useRef(null),
-      bottomRight: useRef(null)
-    },
-    desktop: {
-      cards: {
-        topLeft: useRef(null),
-        topRight: useRef(null),
-        bottomLeft: useRef(null),
-        bottomRight: useRef(null)
-      },
-      backgrounds: {
-        topLeft: useRef(null),
-        topRight: useRef(null),
-        bottomLeft: useRef(null),
-        bottomRight: useRef(null)
-      },
-      content: {
-        topLeft: useRef(null),
-        topRight: useRef(null),
-        bottomLeft: useRef(null),
-        bottomRight: useRef(null)
-      }
-    }
-  };
+  const hideButtonsTimeoutRef = React.useRef(null);
 
   // Memoized card data
   const cardData = useMemo(() => ({
@@ -326,140 +289,173 @@ export default function StudentApp() {
     background: "radial-gradient(circle at center 10%, rgb(195,23,40) 0%, rgb(142,5,27) 20%, rgb(130,6,26) 40%, rgb(100,0,11) 60%, rgb(88,1,11) 85%)",
   }), []);
 
-  // Animation functions
-  const runMobileAnimation = useCallback(() => {
-    const mobileElements = Object.values(refs.mobile)
-      .map(ref => ref.current)
-      .filter(Boolean);
-
-    if (mobileElements.length === 0) return;
-
-    // Kill any existing animations first
-    gsap.killTweensOf(mobileElements);
-    if (refs.phone.current) {
-      gsap.killTweensOf(refs.phone.current);
-    }
-
-    // Set initial states for mobile cards
-    gsap.set(refs.mobile.topLeft.current, { 
-      x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
-      opacity: 0 
-    });
-    gsap.set(refs.mobile.topRight.current, { 
-      x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
-      opacity: 0 
-    });
-    gsap.set(refs.mobile.bottomLeft.current, { 
-      x: ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
-      opacity: 0 
-    });
-    gsap.set(refs.mobile.bottomRight.current, { 
-      x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
-      opacity: 0 
-    });
-
-    // Create timeline for mobile animations
-    const tl = gsap.timeline();
-
-    // Animate cards with stagger
-    tl.to(refs.mobile.topLeft.current, {
-      x: 0,
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
       opacity: 1,
-      duration: ANIMATION_CONFIG.DURATIONS.MOBILE_CARD,
-      ease: "power3.out"
-    })
-    .to(refs.mobile.topRight.current, {
-      x: 0,
-      opacity: 1,
-      duration: ANIMATION_CONFIG.DURATIONS.MOBILE_CARD,
-      ease: "power3.out"
-    }, `-=${ANIMATION_CONFIG.DURATIONS.MOBILE_CARD - ANIMATION_CONFIG.MOBILE_ANIMATIONS.STAGGER}`)
-    .to(refs.mobile.bottomLeft.current, {
-      x: 0,
-      opacity: 1,
-      duration: ANIMATION_CONFIG.DURATIONS.MOBILE_CARD,
-      ease: "power3.out"
-    }, `-=${ANIMATION_CONFIG.DURATIONS.MOBILE_CARD - ANIMATION_CONFIG.MOBILE_ANIMATIONS.STAGGER}`)
-    .to(refs.mobile.bottomRight.current, {
-      x: 0,
-      opacity: 1,
-      duration: ANIMATION_CONFIG.DURATIONS.MOBILE_CARD,
-      ease: "power3.out"
-    }, `-=${ANIMATION_CONFIG.DURATIONS.MOBILE_CARD - ANIMATION_CONFIG.MOBILE_ANIMATIONS.STAGGER}`);
-
-    // Animate phone if present
-    if (refs.phone.current) {
-      gsap.set(refs.phone.current, { opacity: 0, y: 50 });
-      tl.to(refs.phone.current, {
-        opacity: 1,
-        y: 0,
-        duration: ANIMATION_CONFIG.DURATIONS.PHONE_SLIDE,
-        ease: "power3.out"
-      }, `-=${ANIMATION_CONFIG.DURATIONS.MOBILE_CARD - 0.3}`);
-    }
-  }, []);
-
-  const runDesktopAnimation = useCallback(() => {
-    const { cards, backgrounds, content } = refs.desktop;
-    
-    const cardElements = Object.values(cards).map(ref => ref.current).filter(Boolean);
-    const bgElements = Object.values(backgrounds).map(ref => ref.current).filter(Boolean);
-    const contentElements = Object.values(content).map(ref => ref.current).filter(Boolean);
-
-    if (!refs.phone.current || cardElements.length === 0) return;
-
-    const tl = gsap.timeline();
-
-    // Set initial states
-    gsap.set(refs.phone.current, { opacity: 0, y: 200 });
-    gsap.set(cardElements, { opacity: 0 });
-    gsap.set(bgElements, { scale: 0, transformOrigin: "center center" });
-
-    // Set content positions
-    const contentPositions = [
-      { x: -200, y: -100 }, // topLeft
-      { x: 200, y: -100 },  // topRight
-      { x: -200, y: 100 },  // bottomLeft
-      { x: 200, y: 100 }    // bottomRight
-    ];
-
-    contentElements.forEach((element, index) => {
-      if (element && contentPositions[index]) {
-        gsap.set(element, { ...contentPositions[index], opacity: 0 });
+      transition: {
+        staggerChildren: ANIMATION_CONFIG.MOBILE_ANIMATIONS.STAGGER,
+        delayChildren: 0.1,
       }
-    });
-
-    // Animate
-    tl.to(cardElements, { opacity: 1, duration: 0.1 })
-      .to(bgElements, {
-        scale: 1,
-        duration: ANIMATION_CONFIG.DURATIONS.CARD_SCALE,
-        ease: "back.out(1.7)",
-        stagger: 0.1,
-      }, 0)
-      .to(refs.phone.current, {
-        opacity: 1,
-        y: 0,
-        duration: ANIMATION_CONFIG.DURATIONS.PHONE_SLIDE,
-        ease: "power3.out",
-      }, 0.2)
-      .to(contentElements, {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        duration: ANIMATION_CONFIG.DURATIONS.CONTENT_SLIDE,
-        ease: "power3.out",
-        stagger: 0.1,
-      }, 0.3);
-  }, []);
-
-  const runAnimation = useCallback(() => {
-    if (isMobile) {
-      runMobileAnimation();
-    } else {
-      runDesktopAnimation();
     }
-  }, [isMobile, runMobileAnimation, runDesktopAnimation]);
+  };
+
+  // Mobile animation variants
+  const mobileCardVariants = {
+    leftSlide: {
+      hidden: {
+        x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET,
+        opacity: 0
+      },
+      visible: {
+        x: 0,
+        opacity: 1,
+        transition: {
+          duration: ANIMATION_CONFIG.DURATIONS.MOBILE_CARD,
+          ease: [0.25, 0.46, 0.45, 0.94] // power3.out equivalent
+        }
+      }
+    },
+    rightSlide: {
+      hidden: {
+        x: ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET,
+        opacity: 0
+      },
+      visible: {
+        x: 0,
+        opacity: 1,
+        transition: {
+          duration: ANIMATION_CONFIG.DURATIONS.MOBILE_CARD,
+          ease: [0.25, 0.46, 0.45, 0.94]
+        }
+      }
+    }
+  };
+
+  const phoneVariants = {
+    hidden: {
+      opacity: 0,
+      y: 50
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: ANIMATION_CONFIG.DURATIONS.PHONE_SLIDE,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      }
+    }
+  };
+
+  // Desktop animation variants
+  const desktopContainerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1,
+      }
+    }
+  };
+
+  const desktopCardVariants = {
+    hidden: {
+      opacity: 0
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.1
+      }
+    }
+  };
+
+  const desktopBackgroundVariants = {
+    hidden: {
+      scale: 0,
+      transformOrigin: "center center"
+    },
+    visible: {
+      scale: 1,
+      transition: {
+        duration: ANIMATION_CONFIG.DURATIONS.CARD_SCALE,
+        ease: [0.68, -0.55, 0.265, 1.55] // back.out(1.7) equivalent
+      }
+    }
+  };
+
+  const desktopPhoneVariants = {
+    hidden: {
+      opacity: 0,
+      y: 200
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: ANIMATION_CONFIG.DURATIONS.PHONE_SLIDE,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        delay: 0.2
+      }
+    }
+  };
+
+  const desktopContentVariants = {
+    topLeft: {
+      hidden: { x: -200, y: -100, opacity: 0 },
+      visible: { 
+        x: 0, 
+        y: 0, 
+        opacity: 1,
+        transition: {
+          duration: ANIMATION_CONFIG.DURATIONS.CONTENT_SLIDE,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          delay: 0.3
+        }
+      }
+    },
+    topRight: {
+      hidden: { x: 200, y: -100, opacity: 0 },
+      visible: { 
+        x: 0, 
+        y: 0, 
+        opacity: 1,
+        transition: {
+          duration: ANIMATION_CONFIG.DURATIONS.CONTENT_SLIDE,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          delay: 0.4
+        }
+      }
+    },
+    bottomLeft: {
+      hidden: { x: -200, y: 100, opacity: 0 },
+      visible: { 
+        x: 0, 
+        y: 0, 
+        opacity: 1,
+        transition: {
+          duration: ANIMATION_CONFIG.DURATIONS.CONTENT_SLIDE,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          delay: 0.5
+        }
+      }
+    },
+    bottomRight: {
+      hidden: { x: 200, y: 100, opacity: 0 },
+      visible: { 
+        x: 0, 
+        y: 0, 
+        opacity: 1,
+        transition: {
+          duration: ANIMATION_CONFIG.DURATIONS.CONTENT_SLIDE,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          delay: 0.6
+        }
+      }
+    }
+  };
 
   // Event handlers
   const handleButtonHover = useCallback((buttonType) => {
@@ -492,7 +488,6 @@ export default function StudentApp() {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < BREAKPOINTS.MOBILE);
-      ScrollTrigger.refresh();
     };
 
     window.addEventListener("resize", handleResize);
@@ -500,94 +495,12 @@ export default function StudentApp() {
   }, []);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    if (isMobile) {
-      // Set initial states for mobile cards
-      const mobileElements = Object.values(refs.mobile)
-        .map(ref => ref.current)
-        .filter(Boolean);
-
-      if (mobileElements.length > 0) {
-        // Set initial positions (will be animated by scroll trigger)
-        gsap.set(refs.mobile.topLeft.current, { 
-          x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
-          opacity: 0 
-        });
-        gsap.set(refs.mobile.topRight.current, { 
-          x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
-          opacity: 0 
-        });
-        gsap.set(refs.mobile.bottomLeft.current, { 
-          x: ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
-          opacity: 0 
-        });
-        gsap.set(refs.mobile.bottomRight.current, { 
-          x: -ANIMATION_CONFIG.MOBILE_ANIMATIONS.OFFSET, 
-          opacity: 0 
-        });
-      }
-
-      if (refs.phone.current) {
-        gsap.set(refs.phone.current, { opacity: 0, y: 50 });
-      }
-
-      // Create ScrollTrigger for mobile
-      const mobileScrollTrigger = ScrollTrigger.create({
-        trigger: containerRef.current,
-        start: ANIMATION_CONFIG.SCROLL_START,
-        end: ANIMATION_CONFIG.SCROLL_END,
-        onEnter: runMobileAnimation,
-        onEnterBack: runMobileAnimation,
-      });
-
-      return () => {
-        mobileScrollTrigger.kill();
-        if (hideButtonsTimeoutRef.current) {
-          clearTimeout(hideButtonsTimeoutRef.current);
-        }
-      };
-    }
-
-    // --- Desktop setup (unchanged) ---
-    const { cards, backgrounds, content } = refs.desktop;
-
-    if (refs.phone.current) {
-      gsap.set(refs.phone.current, { opacity: 0, y: 200 });
-    }
-
-    const cardElements = Object.values(cards).map(ref => ref.current).filter(Boolean);
-    const bgElements = Object.values(backgrounds).map(ref => ref.current).filter(Boolean);
-    const contentElements = Object.values(content).map(ref => ref.current).filter(Boolean);
-
-    if (cardElements.length > 0) gsap.set(cardElements, { opacity: 0 });
-    if (bgElements.length > 0) gsap.set(bgElements, { scale: 0 });
-    if (contentElements.length > 0) gsap.set(contentElements, { opacity: 0 });
-
-    const scrollTrigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: ANIMATION_CONFIG.SCROLL_START,
-      end: ANIMATION_CONFIG.SCROLL_END,
-      onEnter: runDesktopAnimation,
-      onEnterBack: runDesktopAnimation,
-    });
-
-    const handleAnimationTrigger = (event) => {
-      if (event.detail?.sectionName === "app") {
-        setTimeout(runDesktopAnimation, 100);
-      }
-    };
-
-    window.addEventListener("triggerSectionAnimation", handleAnimationTrigger);
-
     return () => {
-      scrollTrigger.kill();
-      window.removeEventListener("triggerSectionAnimation", handleAnimationTrigger);
       if (hideButtonsTimeoutRef.current) {
         clearTimeout(hideButtonsTimeoutRef.current);
       }
     };
-  }, [isMobile, runDesktopAnimation, runMobileAnimation]);
+  }, []);
 
   // Render helpers
   const renderNavigationButton = useCallback(
@@ -607,11 +520,11 @@ export default function StudentApp() {
       [hoveredButton, handleNavigation, handleButtonHover, handleButtonLeave]
     );
 
-  const renderMobileCard = useCallback((refKey, title, content, className = "") => (
-    <div
-      ref={refs.mobile[refKey]}
+  const renderMobileCard = useCallback((title, content, className = "", variants) => (
+    <motion.div
       className={`bg-[#2C1B1B]/80 backdrop-blur-lg rounded-2xl border-2 border-white/40 shadow-lg ${className}`}
       style={cardStyle}
+      variants={variants}
     >
       {title && (
         <h3 className="text-white font-extrabold mb-2 text-center text-base sm:text-sm">
@@ -619,12 +532,11 @@ export default function StudentApp() {
         </h3>
       )}
       {content}
-    </div>
+    </motion.div>
   ), [cardStyle]);
 
   return (
     <div
-      ref={containerRef}
       id="app"
       className="min-h-screen w-full overflow-hidden relative"
       style={backgroundStyle}
@@ -674,11 +586,20 @@ export default function StudentApp() {
 
         {/* Mobile Layout */}
         {isMobile && (
-          <section className="max-w-sm sm:max-w-md mx-auto mb-8 space-y-4">
+          <motion.section 
+            className="max-w-sm sm:max-w-md mx-auto mb-8 space-y-4"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ 
+              once: false,
+              amount: 0.3,
+              margin: "-20% 0px -20% 0px"
+            }}
+          >
             {/* Top Full Width Card - Communities & Daily Quizzes */}
             <div className="w-full">
               {renderMobileCard(
-                "topLeft",
                 "Communities & Daily Quizzes",
                 <div className="w-full h-full sm:h-[280px] flex items-center justify-center overflow-hidden rounded-xl">
                   <CardSlider
@@ -688,7 +609,8 @@ export default function StudentApp() {
                     layout="image-text"
                   />
                 </div>,
-                "h-[350px] sm:h-[360px] p-3 sm:p-4 flex flex-col"
+                "h-[350px] sm:h-[360px] p-3 sm:p-4 flex flex-col",
+                mobileCardVariants.leftSlide
               )}
             </div>
 
@@ -696,7 +618,6 @@ export default function StudentApp() {
             <div className="flex gap-3 sm:gap-4">
               <div className="flex-1">
                 {renderMobileCard(
-                  "topRight", 
                   "Your Dost AI",
                   <div className="flex justify-between items-end">
                     <img
@@ -709,13 +630,13 @@ export default function StudentApp() {
                       Your <span className="font-bold">AI buddy</span> for everything from silly questions to serious career advice
                     </p>
                   </div>,
-                  "h-[130px] sm:h-[150px] p-2 sm:p-3 flex flex-col"
+                  "h-[130px] sm:h-[150px] p-2 sm:p-3 flex flex-col",
+                  mobileCardVariants.leftSlide
                 )}
               </div>
 
               <div className="flex-1">
                 {renderMobileCard(
-                  "bottomLeft",
                   "ST PRO Membership", 
                   <div className="flex-1 flex flex-col items-center justify-center">
                     <p className="text-white/90 text-xs sm:text-[10px] text-center leading-tight">
@@ -723,7 +644,8 @@ export default function StudentApp() {
                       <span className="font-extrabold">₹299/month</span>
                     </p>
                   </div>,
-                  "h-[130px] sm:h-[150px] p-2 sm:p-3 flex flex-col"
+                  "h-[130px] sm:h-[150px] p-2 sm:p-3 flex flex-col",
+                  mobileCardVariants.rightSlide
                 )}
               </div>
             </div>
@@ -731,7 +653,6 @@ export default function StudentApp() {
             {/* Bottom Full Width Card - Gigs & Star Connects */}
             <div className="w-full">
               {renderMobileCard(
-                "bottomRight",
                 "Gigs & Star Connects",
                 <div className="w-full h-[280px] sm:h-[320px] flex items-center justify-center overflow-hidden rounded-xl">
                   <CardSlider
@@ -741,22 +662,30 @@ export default function StudentApp() {
                     layout="image-title-text"
                   />
                 </div>,
-                "h-[300px] sm:h-[420px] p-3 sm:p-4 flex flex-col" // Increased height
+                "h-[300px] sm:h-[420px] p-3 sm:p-4 flex flex-col",
+                mobileCardVariants.leftSlide
               )}
             </div>
-          </section>
+          </motion.section>
         )}
 
         {/* Mobile Phone Mockup */}
         {isMobile && (
           <section className="mb-12 md:mb-16">
             <div className="flex justify-center">
-              <img
-                ref={refs.phone}
+              <motion.img
                 src={iphone}
                 alt="iPhone Mockup"
                 className="w-[280px] sm:w-[360px] md:w-[400px] h-auto drop-shadow-2xl"
                 loading="lazy"
+                variants={phoneVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ 
+                  once: false,
+                  amount: 0.3,
+                  margin: "-20% 0px -20% 0px"
+                }}
               />
             </div>
           </section>
@@ -764,17 +693,27 @@ export default function StudentApp() {
 
         {/* Desktop Layout */}
         {!isMobile && (
-          <section className="max-w-7xl mx-auto mb-16">
+          <motion.section 
+            className="max-w-7xl mx-auto mb-16"
+            variants={desktopContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ 
+              once: false,
+              amount: 0.3,
+              margin: "-20% 0px -20% 0px"
+            }}
+          >
             <div className="grid grid-cols-3 gap-6 xl:gap-8">
               {/* Column 1 */}
               <div className="flex flex-col gap-6 xl:gap-8 max-w-[400px]">
-                <div ref={refs.desktop.cards.topLeft} className="opacity-0">
-                  <div
-                    ref={refs.desktop.backgrounds.topLeft}
+                <motion.div variants={desktopCardVariants}>
+                  <motion.div
                     className="bg-[#2C1B1B]/80 backdrop-blur-lg h-[450px] xl:h-[500px] rounded-2xl p-4 xl:p-6 flex flex-col border-2 border-white/40 shadow-lg"
                     style={cardStyle}
+                    variants={desktopBackgroundVariants}
                   >
-                    <div ref={refs.desktop.content.topLeft}>
+                    <motion.div variants={desktopContentVariants.topLeft}>
                       <h3 className="text-white text-xl xl:text-2xl font-extrabold mb-3 xl:mb-4 text-center">
                         Communities & Daily Quizzes
                       </h3>
@@ -784,17 +723,20 @@ export default function StudentApp() {
                         autoSlideInterval={ANIMATION_CONFIG.AUTO_SLIDE_INTERVALS.QUIZ}
                         layout="image-text"
                       />
-                    </div>
-                  </div>
-                </div>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
 
-                <div ref={refs.desktop.cards.bottomLeft} className="opacity-0">
-                  <div
-                    ref={refs.desktop.backgrounds.bottomLeft}
+                <motion.div variants={desktopCardVariants}>
+                  <motion.div
                     className="bg-[#2C1B1B]/80 backdrop-blur-lg rounded-2xl px-4 xl:px-6 flex flex-col border-2 border-white/40 shadow-lg"
                     style={cardStyle}
+                    variants={desktopBackgroundVariants}
                   >
-                    <div ref={refs.desktop.content.bottomLeft} className="flex flex-row relative  gap-4 xl:gap-6 ">
+                    <motion.div 
+                      variants={desktopContentVariants.bottomLeft} 
+                      className="flex flex-row relative gap-4 xl:gap-6"
+                    >
                       <img
                         src={robot}
                         alt="Your Dost AI"
@@ -809,32 +751,32 @@ export default function StudentApp() {
                           Your <span className="font-bold">AI buddy</span> for everything – from silly questions to serious career advice, smarter than your group chat
                         </p>
                       </div>
-                    </div>
-                  </div>
-                </div>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
               </div>
 
               {/* Column 2 - Phone Mockup */}
               <div className="flex flex-col justify-center">
-                <div ref={refs.phone} className="opacity-0">
+                <motion.div variants={desktopPhoneVariants}>
                   <img
                     src={iphone}
                     alt="iPhone Mockup"
                     className="w-[420px] h-auto drop-shadow-2xl z-10 mx-auto"
                     loading="lazy"
                   />
-                </div>
+                </motion.div>
               </div>
 
               {/* Column 3 */}
               <div className="flex flex-col gap-6 xl:gap-8">
-                <div ref={refs.desktop.cards.topRight} className="opacity-0">
-                  <div
-                    ref={refs.desktop.backgrounds.topRight}
+                <motion.div variants={desktopCardVariants}>
+                  <motion.div
                     className="bg-[#2C1B1B]/80 backdrop-blur-lg rounded-2xl p-4 xl:p-6 flex flex-col border-2 border-white/40 shadow-lg items-center justify-center"
                     style={cardStyle}
+                    variants={desktopBackgroundVariants}
                   >
-                    <div ref={refs.desktop.content.topRight}>
+                    <motion.div variants={desktopContentVariants.topRight}>
                       <h3 className="text-white text-xl xl:text-2xl font-extrabold mb-4 xl:mb-6 text-center">
                         ST PRO Membership
                       </h3>
@@ -845,17 +787,17 @@ export default function StudentApp() {
                         <span className="font-extrabold">₹299/month</span>.<br />
                         Totally worth it, 1000% yes!
                       </p>
-                    </div>
-                  </div>
-                </div>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
 
-                <div ref={refs.desktop.cards.bottomRight} className="opacity-0">
-                  <div
-                    ref={refs.desktop.backgrounds.bottomRight}
+                <motion.div variants={desktopCardVariants}>
+                  <motion.div
                     className="bg-[#2C1B1B]/80 backdrop-blur-lg h-[500px] xl:h-[550px] rounded-2xl p-4 xl:p-6 flex flex-col border-2 border-white/40 shadow-lg"
                     style={cardStyle}
+                    variants={desktopBackgroundVariants}
                   >
-                    <div ref={refs.desktop.content.bottomRight}>
+                    <motion.div variants={desktopContentVariants.bottomRight}>
                       <h3 className="text-white text-xl xl:text-2xl font-extrabold mb-4 xl:mb-6 text-center">
                         Gigs & Star Connects
                       </h3>
@@ -865,12 +807,12 @@ export default function StudentApp() {
                         autoSlideInterval={ANIMATION_CONFIG.AUTO_SLIDE_INTERVALS.GIGS}
                         layout="image-title-text"
                       />
-                    </div>
-                  </div>
-                </div>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
               </div>
             </div>
-          </section>
+          </motion.section>
         )}
       </main>
     </div>

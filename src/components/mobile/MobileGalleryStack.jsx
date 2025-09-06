@@ -1,9 +1,6 @@
-import React, { useRef, useEffect } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React from "react";
+import { motion } from "framer-motion";
 import { MobileCard } from "./MobileCard";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export const MobileGalleryStack = ({
   centerImage,
@@ -18,12 +15,6 @@ export const MobileGalleryStack = ({
   isVisible = false,
   screenSize,
 }) => {
-  // Refs for animation targets
-  const containerRef = useRef(null);
-  const jobOpeningsRef = useRef(null);
-  const volunteerWorkRef = useRef(null);
-  const internshipsRef = useRef(null);
-
   // Add safety check for screenSize
   if (
     !screenSize ||
@@ -47,113 +38,67 @@ export const MobileGalleryStack = ({
 
   const dimensions = getDimensions();
 
-  // GSAP Animation function
-  const runGSAPAnimation = () => {
-    const elements = [
-      jobOpeningsRef.current,
-      volunteerWorkRef.current,
-      internshipsRef.current
-    ].filter(Boolean);
-
-    if (elements.length === 0) return;
-
-    // Kill any existing animations
-    gsap.killTweensOf(elements);
-
-    // Set initial states
-    gsap.set(jobOpeningsRef.current, {
-      x: -50, // translate from left
-      opacity: 0
-    });
-
-    gsap.set(volunteerWorkRef.current, {
-      x: 50, // translate from right
-      opacity: 0
-    });
-
-    gsap.set(internshipsRef.current, {
-      x: -50, // translate from left
-      opacity: 0
-    });
-
-    // Create animation timeline
-    const tl = gsap.timeline();
-
-    // Animate Job Openings (from left)
-    tl.to(jobOpeningsRef.current, {
-      x: 0,
+  // Animation variants for the container
+  const containerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
       opacity: 1,
-      duration: 0.8,
-      ease: "power3.out"
-    })
-    // Animate Volunteer Work (from right) - stagger by 0.2s
-    .to(volunteerWorkRef.current, {
-      x: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: "power3.out"
-    }, "-=0.6") // Start 0.6s before previous animation ends
-    // Animate Internships (from left) - stagger by 0.2s
-    .to(internshipsRef.current, {
-      x: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: "power3.out"
-    }, "-=0.6"); // Start 0.6s before previous animation ends
+      transition: {
+        staggerChildren: 0.2, // Stagger animations by 0.2s
+        delayChildren: 0.1, // Start after 0.1s
+      }
+    }
   };
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    // Set initial states
-    const elements = [
-      jobOpeningsRef.current,
-      volunteerWorkRef.current,
-      internshipsRef.current
-    ].filter(Boolean);
-
-    if (elements.length > 0) {
-      gsap.set(jobOpeningsRef.current, {
-        x: -50,
-        opacity: 0
-      });
-      gsap.set(volunteerWorkRef.current, {
-        x: 50,
-        opacity: 0
-      });
-      gsap.set(internshipsRef.current, {
-        x: -50,
-        opacity: 0
-      });
+  // Animation variants for cards coming from left
+  const slideFromLeftVariants = {
+    hidden: {
+      x: -50,
+      opacity: 0
+    },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94] // Similar to power3.out
+      }
     }
+  };
 
-    // Create ScrollTrigger
-    const scrollTrigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top 85%", // Trigger when section is 85% from top of viewport
-      end: "bottom 15%",
-      onEnter: runGSAPAnimation,
-      onEnterBack: runGSAPAnimation,
-      once: false, // Allow animation to trigger multiple times
-      markers: false // Set to true for debugging
-    });
-
-    // Cleanup
-    return () => {
-      scrollTrigger.kill();
-    };
-  }, [screenSize]); // Re-run when screenSize changes
+  // Animation variants for cards coming from right
+  const slideFromRightVariants = {
+    hidden: {
+      x: 50,
+      opacity: 0
+    },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94] // Similar to power3.out
+      }
+    }
+  };
 
   return (
-    <div
-      ref={containerRef}
+    <motion.div
       className="w-full max-w-md mx-auto px-4"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ 
+        once: false, // Allow animation to trigger multiple times
+        amount: 0.3, // Trigger when 30% of the element is in view
+        margin: "-15% 0px -15% 0px" // Similar to start: "top 85%" and end: "bottom 15%"
+      }}
     >
       {/* Job Openings Section - Top */}
-      <div
-        ref={jobOpeningsRef}
+      <motion.div
         className="w-full mb-4"
         style={{ minHeight: dimensions.cardHeight }}
+        variants={slideFromLeftVariants}
       >
         <div className="bg-black px-4 py-4 rounded-lg flex flex-col gap-1">
           <p className="text-white font-medium">JOB OPENINGS</p>
@@ -166,13 +111,13 @@ export const MobileGalleryStack = ({
             opacity={1}
           />
         </div>
-      </div>
+      </motion.div>
 
       {/* Volunteer Work Section - Middle */}
-      <div
-        ref={volunteerWorkRef}
+      <motion.div
         className="w-full mb-4"
         style={{ minHeight: dimensions.cardHeight }}
+        variants={slideFromRightVariants}
       >
         <div className="bg-black px-4 py-4 rounded-lg flex flex-col gap-1">
           <p className="text-right text-white font-medium">VOLUNTEER WORK</p>
@@ -185,13 +130,13 @@ export const MobileGalleryStack = ({
             opacity={1}
           />
         </div>
-      </div>
+      </motion.div>
 
       {/* Internships Section - Bottom */}
-      <div
-        ref={internshipsRef}
+      <motion.div
         className="w-full"
         style={{ minHeight: dimensions.cardHeight }}
+        variants={slideFromLeftVariants}
       >
         <div className="bg-black px-4 py-4 rounded-lg flex flex-col gap-1">
           <p className="text-white font-medium">INTERNSHIPS</p>
@@ -204,7 +149,7 @@ export const MobileGalleryStack = ({
             opacity={1}
           />
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };

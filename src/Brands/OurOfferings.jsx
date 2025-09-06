@@ -15,7 +15,7 @@ function OurOfferings() {
   // UI state
   const [hoveredButton, setHoveredButton] = useState("brands");
   const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const [showButtons, setShowButtons] = useState(false); // also used to nudge whole content down
+  const [showButtons, setShowButtons] = useState(false);
   const navigate = useNavigate();
 
   // Hover handlers (logo/nav)
@@ -26,7 +26,6 @@ function OurOfferings() {
   };
 
   const scrollToSection = (section) => {
-    // hook these up to your routing/scroll targets if needed
     if (section === "main-section") {
       console.log("Navigate to students section");
     } else if (section === "brands-section") {
@@ -83,7 +82,7 @@ function OurOfferings() {
       points: [
         "Full-funnel marketing & engagement strategies",
         "Nano & micro influencer program management",
-        "Custom content marketing â€ memes, reels, short videos",
+        "Custom content marketing – memes, reels, short videos",
         "Brand advocacy & ambassador programs",
       ],
     },
@@ -92,19 +91,20 @@ function OurOfferings() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    // Initial stack state for cards
+    // Initial state: First card starts small and visible, others hidden
     cardsRef.current.forEach((card, index) => {
       if (!card) return;
       
-      // Show the first card by default, hide the rest
       if (index === 0) {
+        // First card starts at 70% scale to indicate more content below
         gsap.set(card, {
-          scale: 1,
+          scale: 0.7,
           opacity: 1,
           y: 0,
           transformOrigin: "center center",
         });
       } else {
+        // Other cards start hidden and stacked
         gsap.set(card, {
           scale: 0.3,
           opacity: 0,
@@ -116,101 +116,89 @@ function OurOfferings() {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: sectionRef.current, // pin the whole h-screen section
+        trigger: sectionRef.current,
         start: "top top",
         end: `+=${cardsData.length * 100}%`,
         pin: true,
         scrub: 1,
         pinSpacing: true,
-        // Replace the onUpdate callback in your ScrollTrigger with this:
-onUpdate: (self) => {
-  const progress = self.progress;
-  const totalCards = cardsData.length;
-  const segmentSize = 1 / totalCards;
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const totalCards = cardsData.length;
+          const segmentSize = 1 / totalCards;
 
-  const currentSegment = Math.floor(progress / segmentSize);
-  const currentCardIndex = Math.min(currentSegment, totalCards - 1);
+          const currentSegment = Math.floor(progress / segmentSize);
+          const currentCardIndex = Math.min(currentSegment, totalCards - 1);
 
-  let segmentProgress = (progress % segmentSize) / segmentSize;
-  if (progress === 1) segmentProgress = 1;
+          let segmentProgress = (progress % segmentSize) / segmentSize;
+          if (progress === 1) segmentProgress = 1;
 
-  // --- reveal delay ---
-  const revealDelay = 0.4;
-  const inPhaseB = segmentProgress >= revealDelay;
-  const tIn = inPhaseB
-    ? (segmentProgress - revealDelay) / (1 - revealDelay)
-    : 0;
+          // Reveal delay for smoother transitions
+          const revealDelay = 0.3;
+          const inPhaseB = segmentProgress >= revealDelay;
+          const tIn = inPhaseB
+            ? (segmentProgress - revealDelay) / (1 - revealDelay)
+            : 0;
 
- 
-  const stackOffset =  15;
+          const stackOffset = 15;
 
-  // --- nav highlight (FIXED) ---
-  let navIndex;
-  
-  // Determine which card should be highlighted based on visibility
-  if (currentCardIndex === 0) {
-    // In first segment, always highlight first card
-    navIndex = 0;
-  } else {
-    // For other segments, highlight based on which card is more prominent
-    if (inPhaseB) {
-      // Current card is animating in and visible, highlight it
-      navIndex = currentCardIndex;
-    } else {
-      // Current card is still hidden, keep highlighting previous card
-      navIndex = Math.max(0, currentCardIndex - 1);
-    }
-  }
-  
-  // This uses the most recent state value provided by React
-setActiveCardIndex((prevIndex) => {
-  // Only update state if the index has actually changed
-  if (navIndex !== prevIndex) {
-    return navIndex;
-  }
-  return prevIndex;
-});
+          // Navigation highlighting
+          let navIndex;
+          if (currentCardIndex === 0) {
+            navIndex = 0;
+          } else {
+            navIndex = inPhaseB ? currentCardIndex : Math.max(0, currentCardIndex - 1);
+          }
 
-  // --- card animations ---
-  cardsRef.current.forEach((card, index) => {
-    if (!card) return;
+          setActiveCardIndex((prevIndex) => {
+            if (navIndex !== prevIndex) {
+              return navIndex;
+            }
+            return prevIndex;
+          });
 
-    if (index < currentCardIndex) {
-      // Previous cards stacked
-      gsap.set(card, {
-        scale: 1,
-        opacity: 1,
-        y: (index - currentCardIndex) * stackOffset,
-      });
-      return;
-    }
+          // Card animations
+          cardsRef.current.forEach((card, index) => {
+            if (!card) return;
 
-    if (index === currentCardIndex) {
-      // Special case for the first card - keep it visible without animation
-      if (index === 0 && currentCardIndex === 0) {
-        gsap.set(card, {
-          scale: 1,
-          opacity: 1,
-          y: 0,
-        });
-        return;
-      }
-      
-      // Normal animation for other cards
-      if (!inPhaseB) {
-        gsap.set(card, { scale: 0.3, opacity: 0, y: 40 });
-      } else {
-        const scale = 0.3 + tIn * 0.7;   // 0.3 â†' 1
-        const y = (1 - tIn) * 40;        // 40 â†' 0
-        gsap.set(card, { scale, opacity: 1, y });
-      }
-      return;
-    }
+            if (index < currentCardIndex) {
+              // Previous cards stacked
+              gsap.set(card, {
+                scale: 1,
+                opacity: 1,
+                y: (index - currentCardIndex) * stackOffset,
+              });
+              return;
+            }
 
-    gsap.set(card, { scale: 0.3, opacity: 0, y: 40 });
-  });
-},
-        // Remove the onStart callback since the first card is now visible by default
+            if (index === currentCardIndex) {
+              // Current card animation
+              if (index === 0) {
+                // First card: grows from 0.7 to 1.0 during first segment
+                const firstCardProgress = Math.min(progress / segmentSize, 1);
+                const scale = 0.7 + (firstCardProgress * 0.3); // 0.7 → 1.0
+                gsap.set(card, {
+                  scale: scale,
+                  opacity: 1,
+                  y: 0,
+                });
+              } else {
+                // Other cards: normal reveal animation
+                if (!inPhaseB) {
+                  gsap.set(card, { scale: 0.3, opacity: 0, y: 40 });
+                } else {
+                  const scale = 0.3 + tIn * 0.7;   // 0.3 → 1
+                  const y = (1 - tIn) * 40;        // 40 → 0
+                  gsap.set(card, { scale, opacity: 1, y });
+                }
+              }
+              return;
+            }
+
+            // Future cards remain hidden
+            gsap.set(card, { scale: 0.3, opacity: 0, y: 40 });
+          });
+        },
       },
     });
 
@@ -218,7 +206,6 @@ setActiveCardIndex((prevIndex) => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
       tl && tl.kill();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update nav styles
@@ -236,11 +223,8 @@ setActiveCardIndex((prevIndex) => {
   }, [activeCardIndex]);
 
   return (
-    <section ref={sectionRef} className="relative w-screen h-screen ">
-      <div
-        className={`h-full w-full flex flex-col items-center transition-transform duration-300 
-        `}
-      >
+    <section ref={sectionRef} className="relative w-screen h-screen">
+      <div className="h-full w-full flex flex-col items-center transition-transform duration-300">
         <div
           className="flex flex-col items-center pt-6"
           onMouseEnter={handleLogoOrButtonsMouseEnter}
@@ -293,8 +277,7 @@ setActiveCardIndex((prevIndex) => {
         </div>
 
         <div className="relative flex-1 w-full">
-          {/* Optional: push cards a bit lower below title/logo */}
-          <div className="absolute inset-0 flex  pt-12 sm:pt-auto items-center justify-center">
+          <div className="absolute inset-0 flex pt-12 sm:pt-auto items-center justify-center">
             {cardsData.map((card, index) => (
               <div
                 key={card.id}
@@ -302,18 +285,12 @@ setActiveCardIndex((prevIndex) => {
                 className="absolute p-3 sm:p-4 lg:p-8 transition-all duration-300 ease-out"
                 style={{ zIndex: index }}
               >
-                <div
-                  className="bg-black/80 border relative border-[#5D5D5D] backdrop-blur-sm rounded-2xl
-                  shadow-2xl p-4 sm:p-6 lg:p-8
-                  w-[min(92vw,1100px)]"
-                >
+                <div className="bg-black/80 border relative border-[#5D5D5D] backdrop-blur-sm rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 w-[min(92vw,1100px)]">
                   <h2 className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-3 sm:mb-4">
                     {card.title}
                   </h2>
 
-                  {/* column on mobile, row from sm up */}
-                  <div className="flex flex-col  sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-                    {/* image */}
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
                     <div className="w-full sm:basis-1/2">
                       <div className="rounded-xl overflow-hidden shadow-lg">
                         <img
@@ -324,8 +301,7 @@ setActiveCardIndex((prevIndex) => {
                       </div>
                     </div>
 
-                    {/* points */}
-                    <div className="w-full sm:basis-1/2 pb-8  text-white">
+                    <div className="w-full sm:basis-1/2 pb-8 text-white">
                       <ul className="list-disc list-inside space-y-1 sm:space-y-4 lg:space-y-6">
                         {card.points.map((point, i) => (
                           <li
@@ -337,10 +313,7 @@ setActiveCardIndex((prevIndex) => {
                         ))}
                       </ul>
                     </div>
-                    <button
-                      className="absolute bottom-4 right-4 bg-[#b8001f] hover:bg-[#9a0019]
-                           p-2 lg:p-3 rounded-full transition-transform duration-300 hover:scale-110 shadow-lg"
-                    >
+                    <button className="absolute bottom-4 right-4 bg-[#b8001f] hover:bg-[#9a0019] p-2 lg:p-3 rounded-full transition-transform duration-300 hover:scale-110 shadow-lg">
                       <svg
                         className="w-4 h-4 lg:w-6 lg:h-6 text-white"
                         fill="none"
@@ -360,29 +333,28 @@ setActiveCardIndex((prevIndex) => {
               </div>
             ))}
           </div>
-
-          {/* Rotated nav labels (optional; same stacking context) */}
         </div>
       </div>
-          <div
-            ref={leftNavRef}
-            className=" absolute right-0 left-0 sm:left-auto sm:-right-30 bottom-5 sm:bottom-[45%]   md:rotate-90"
-          >
-            <div className="flex items-center justify-center gap-3 sm:gap-4 font-medium tracking-wider transition-all duration-300">
-              <span className="nav-item text-white font-bold text-[clamp(8px,3vw,16px)] sm:text-base scale-110 transition-all duration-300">
-                COLLEGES
-              </span>
-              <span className="nav-item text-white/60 font-medium text-[clamp(8px,3vw,16px)]  sm:text-base transition-all duration-300">
-                CORPORATES
-              </span>
-              <span className="nav-item text-white/60 font-medium text-[clamp(8px,3vw,16px)] sm:text-base transition-all duration-300">
-                ENTERTAINMENT
-              </span>
-              <span className="nav-item text-white/60 font-medium text-[clamp(8px,3vw,16px)] sm:text-base transition-all duration-300">
-                BRANDS
-              </span>
-            </div>
-          </div>
+      
+      <div
+        ref={leftNavRef}
+        className="absolute right-0 left-0 sm:left-auto sm:-right-30 bottom-5 sm:bottom-[45%] md:rotate-90"
+      >
+        <div className="flex items-center justify-center gap-3 sm:gap-4 font-medium tracking-wider transition-all duration-300">
+          <span className="nav-item text-white font-bold text-[clamp(8px,3vw,16px)] sm:text-base scale-110 transition-all duration-300">
+            COLLEGES
+          </span>
+          <span className="nav-item text-white/60 font-medium text-[clamp(8px,3vw,16px)] sm:text-base transition-all duration-300">
+            CORPORATES
+          </span>
+          <span className="nav-item text-white/60 font-medium text-[clamp(8px,3vw,16px)] sm:text-base transition-all duration-300">
+            ENTERTAINMENT
+          </span>
+          <span className="nav-item text-white/60 font-medium text-[clamp(8px,3vw,16px)] sm:text-base transition-all duration-300">
+            BRANDS
+          </span>
+        </div>
+      </div>
     </section>
   );
 }
