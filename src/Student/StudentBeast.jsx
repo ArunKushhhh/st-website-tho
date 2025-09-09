@@ -32,68 +32,92 @@ const MARQUEE_CONFIG = {
 const SAMPLE_PRODUCTS = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop",
     title: "Oversized Hoodie",
-    description: "Ultimate comfort meets street style. Perfect for those late-night study sessions or casual hangouts with friends.",
+    description:
+      "Ultimate comfort meets street style. Perfect for those late-night study sessions or casual hangouts with friends.",
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop",
     title: "Vintage Tee",
-    description: "Classic vibes with a modern twist. This vintage-inspired tee brings retro coolness to your everyday wardrobe.",
+    description:
+      "Classic vibes with a modern twist. This vintage-inspired tee brings retro coolness to your everyday wardrobe.",
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop",
     title: "Royal Blue Sweatshirt",
-    description: "Bold royal blue with premium puff print detailing. Unisex oversized fit that makes a statement wherever you go.",
+    description:
+      "Bold royal blue with premium puff print detailing. Unisex oversized fit that makes a statement wherever you go.",
   },
   {
     id: 4,
-    image: "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=500&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=500&fit=crop",
     title: "Casual Shirt",
-    description: "Premium cotton casual wear that transitions from classroom to coffee shop. Effortlessly stylish and comfortable.",
+    description:
+      "Premium cotton casual wear that transitions from classroom to coffee shop. Effortlessly stylish and comfortable.",
   },
   {
     id: 5,
-    image: "https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=400&h=500&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=400&h=500&fit=crop",
     title: "Crop Top",
-    description: "Trendy crop top perfect for layering or wearing solo. Designed for confidence and comfort in equal measure.",
+    description:
+      "Trendy crop top perfect for layering or wearing solo. Designed for confidence and comfort in equal measure.",
   },
   {
     id: 6,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop",
     title: "Beast Mode Hoodie",
-    description: "Channel your inner beast with this bold hoodie. Premium fabric meets aggressive design for the ultimate power look.",
+    description:
+      "Channel your inner beast with this bold hoodie. Premium fabric meets aggressive design for the ultimate power look.",
   },
   {
     id: 7,
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop",
     title: "Rebel Tee",
-    description: "Break the rules with style. This rebel-inspired tee features edgy graphics and superior comfort for fearless individuals.",
+    description:
+      "Break the rules with style. This rebel-inspired tee features edgy graphics and superior comfort for fearless individuals.",
   },
   {
     id: 8,
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop",
     title: "Thunder Sweatshirt",
-    description: "Strike like thunder in this electric design. Bold colors and premium materials create the perfect storm of style and comfort.",
+    description:
+      "Strike like thunder in this electric design. Bold colors and premium materials create the perfect storm of style and comfort.",
   },
   {
     id: 9,
-    image: "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=500&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=500&fit=crop",
     title: "Alpha Shirt",
-    description: "Lead the pack with this alpha-inspired shirt. Designed for leaders who aren't afraid to stand out from the crowd.",
+    description:
+      "Lead the pack with this alpha-inspired shirt. Designed for leaders who aren't afraid to stand out from the crowd.",
   },
   {
     id: 10,
-    image: "https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=400&h=500&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=400&h=500&fit=crop",
     title: "Fierce Crop Top",
-    description: "Unleash your fierce side with this statement crop top. Bold design meets feminine power in this must-have piece.",
+    description:
+      "Unleash your fierce side with this statement crop top. Bold design meets feminine power in this must-have piece.",
   },
 ];
 
 // Custom hook for auto rotation (3D carousel)
-const useAutoRotation = (shouldRotate, callback, interval = CAROUSEL_CONFIG.autoRotateInterval) => {
+const useAutoRotation = (
+  shouldRotate,
+  callback,
+  interval = CAROUSEL_CONFIG.autoRotateInterval
+) => {
   const intervalRef = useRef(null);
 
   const start = useCallback(() => {
@@ -123,7 +147,16 @@ const useAutoRotation = (shouldRotate, callback, interval = CAROUSEL_CONFIG.auto
 };
 
 // 3D Carousel Card Component
-const CarouselCard = ({ product, index, rotation, hoveredIndex, activeIndex, onHover, onLeave, onClick }) => {
+const CarouselCard = ({
+  product,
+  index,
+  rotation,
+  hoveredIndex,
+  activeIndex,
+  onHover,
+  onLeave,
+  onClick,
+}) => {
   const angleStep = (2 * Math.PI) / SAMPLE_PRODUCTS.length;
   const angle = index * angleStep;
   const x = Math.sin(angle) * CAROUSEL_CONFIG.radius;
@@ -151,7 +184,8 @@ const CarouselCard = ({ product, index, rotation, hoveredIndex, activeIndex, onH
         `,
         transformStyle: "preserve-3d",
         opacity: isVisible ? 1 : 0,
-        transition: "opacity 0.3s, transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), height 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)",
+        transition:
+          "opacity 0.3s, transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), height 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)",
         zIndex: isHovered ? 1000 : 1,
       }}
       onMouseEnter={() => onHover(index)}
@@ -164,7 +198,8 @@ const CarouselCard = ({ product, index, rotation, hoveredIndex, activeIndex, onH
           boxShadow: isHovered
             ? "0 30px 60px -12px rgba(0, 0, 0, 0.9), 0 35px 35px -5px rgba(0, 0, 0, 0.5)"
             : "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-          transition: "box-shadow 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)",
+          transition:
+            "box-shadow 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)",
           transform: isHovered ? "scale(1.02)" : "scale(1)",
         }}
       >
@@ -197,9 +232,16 @@ const CarouselCard = ({ product, index, rotation, hoveredIndex, activeIndex, onH
                 zIndex: 1001,
               }}
             >
-              <div className="text-center px-6 py-4 max-w-sm" style={{ transform: "scaleX(-1)" }}>
-                <h3 className="text-2xl md:text-4xl font-bold mb-3 text-white">{product.title}</h3>
-                <p className="text-lg md:text-3xl text-white leading-relaxed">{product.description}</p>
+              <div
+                className="text-center px-6 py-4 max-w-sm"
+                style={{ transform: "scaleX(-1)" }}
+              >
+                <h3 className="text-2xl md:text-4xl font-bold mb-3 text-white">
+                  {product.title}
+                </h3>
+                <p className="text-lg md:text-3xl text-white leading-relaxed">
+                  {product.description}
+                </p>
               </div>
             </motion.div>
           )}
@@ -213,10 +255,16 @@ const CarouselCard = ({ product, index, rotation, hoveredIndex, activeIndex, onH
           transformOrigin: "top",
           opacity: 0.3,
           maskImage: "linear-gradient(to bottom, white 0%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to bottom, white 0%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, white 0%, transparent 100%)",
         }}
       >
-        <img src={product.image} alt="" className="w-full h-full object-cover" style={{ filter: "blur(3px)" }} />
+        <img
+          src={product.image}
+          alt=""
+          className="w-full h-full object-cover"
+          style={{ filter: "blur(3px)" }}
+        />
       </div>
     </div>
   );
@@ -238,24 +286,35 @@ const CurvedCarousel = ({ products = SAMPLE_PRODUCTS }) => {
     }
   }, [activeIndex]);
 
-  const shouldAutoRotate = !isDragging && !isCarouselHovered && hoveredIndex === null;
-  const { start: startAutoRotation, stop: stopAutoRotation } = useAutoRotation(shouldAutoRotate, handleAutoRotate);
+  const shouldAutoRotate =
+    !isDragging && !isCarouselHovered && hoveredIndex === null;
+  const { start: startAutoRotation, stop: stopAutoRotation } = useAutoRotation(
+    shouldAutoRotate,
+    handleAutoRotate
+  );
 
-  const handleDragStart = useCallback((clientX) => {
-    stopAutoRotation();
-    setIsDragging(true);
-    setDragStart({ x: clientX, rotation });
-  }, [rotation, stopAutoRotation]);
+  const handleDragStart = useCallback(
+    (clientX) => {
+      stopAutoRotation();
+      setIsDragging(true);
+      setDragStart({ x: clientX, rotation });
+    },
+    [rotation, stopAutoRotation]
+  );
 
-  const handleDragMove = useCallback((clientX) => {
-    if (!isDragging) return;
-    const deltaX = clientX - dragStart.x;
-    const newRotation = dragStart.rotation + deltaX * CAROUSEL_CONFIG.dragSensitivity;
-    setRotation(newRotation);
-    if (activeIndex !== null) {
-      setActiveIndex(null);
-    }
-  }, [isDragging, dragStart, activeIndex]);
+  const handleDragMove = useCallback(
+    (clientX) => {
+      if (!isDragging) return;
+      const deltaX = clientX - dragStart.x;
+      const newRotation =
+        dragStart.rotation + deltaX * CAROUSEL_CONFIG.dragSensitivity;
+      setRotation(newRotation);
+      if (activeIndex !== null) {
+        setActiveIndex(null);
+      }
+    },
+    [isDragging, dragStart, activeIndex]
+  );
 
   const handleDragEnd = useCallback(() => {
     setIsDragging(false);
@@ -304,7 +363,10 @@ const CurvedCarousel = ({ products = SAMPLE_PRODUCTS }) => {
   }
 
   return (
-    <div className="relative w-full flex items-center justify-center cursor-grab active:cursor-grabbing" id="beast-carousel">
+    <div
+      className="relative w-full flex items-center justify-center cursor-grab active:cursor-grabbing"
+      id="beast-carousel"
+    >
       <div
         className="relative"
         style={{
@@ -418,8 +480,12 @@ const MarqueeCard = ({ product, position, hoveredIndex, onHover, onLeave }) => {
               }}
             >
               <div className="text-center py-4 max-w-sm">
-                <h3 className="text-xl md:text-2xl font-bold mb-3 text-white">{product.title}</h3>
-                <p className="text-base md:text-lg text-white leading-relaxed">{product.description}</p>
+                <h3 className="text-xl md:text-2xl font-bold mb-3 text-white">
+                  {product.title}
+                </h3>
+                <p className="text-base md:text-lg text-white leading-relaxed">
+                  {product.description}
+                </p>
               </div>
             </motion.div>
           )}
@@ -471,8 +537,16 @@ const MarqueeCarousel = ({ products = SAMPLE_PRODUCTS }) => {
 
     return [
       { ...products[leftIndex], position: "left", key: `left-${animationKey}` },
-      { ...products[centerIndex], position: "center", key: `center-${animationKey}` },
-      { ...products[rightIndex], position: "right", key: `right-${animationKey}` },
+      {
+        ...products[centerIndex],
+        position: "center",
+        key: `center-${animationKey}`,
+      },
+      {
+        ...products[rightIndex],
+        position: "right",
+        key: `right-${animationKey}`,
+      },
     ];
   };
 
@@ -521,7 +595,10 @@ const MarqueeCarousel = ({ products = SAMPLE_PRODUCTS }) => {
             type: "tween",
           }}
         >
-          <div className="flex items-end justify-center" style={{ gap: `${MARQUEE_CONFIG.cardGap}px` }}>
+          <div
+            className="flex items-end justify-center"
+            style={{ gap: `${MARQUEE_CONFIG.cardGap}px` }}
+          >
             <motion.div
               style={{
                 marginLeft: `-${MARQUEE_CONFIG.cardWidth / 5}px`,
@@ -580,7 +657,14 @@ const MarqueeCarousel = ({ products = SAMPLE_PRODUCTS }) => {
 };
 
 // Navigation Component
-const NavigationHeader = ({ showButtons, onLogoHover, onLogoLeave, onButtonClick, hoveredButton, onButtonHover }) => (
+const NavigationHeader = ({
+  showButtons,
+  onLogoHover,
+  onLogoLeave,
+  onButtonClick,
+  hoveredButton,
+  onButtonHover,
+}) => (
   <div className="relative z-10 pt-4 mb-4 md:pt-6 lg:pt-8 pb-2 md:pb-3 lg:pb-4">
     <div className="text-center">
       <div
@@ -588,11 +672,17 @@ const NavigationHeader = ({ showButtons, onLogoHover, onLogoLeave, onButtonClick
         onMouseEnter={onLogoHover}
         onMouseLeave={onLogoLeave}
       >
-        <img src={stlogo} alt="Student Tribe Logo" className="h-12 sm:h-16 w-auto drop-shadow-lg mb-4" />
+        <img
+          src={stlogo}
+          alt="Student Tribe Logo"
+          className="h-12 sm:h-16 w-auto drop-shadow-lg mb-4"
+        />
 
         <div
           className={`absolute left-1/2 -translate-x-1/2 sm:w-[350px] font-bold z-20 transition-all duration-300 flex justify-center bg-[#2d000a] rounded-full shadow-xl w-[400px] max-w-[90vw] h-[50px] mx-auto ${
-            showButtons ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+            showButtons
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
           }`}
           style={{ top: "calc(100% + 8px)" }}
           onMouseEnter={onLogoHover}
@@ -606,7 +696,11 @@ const NavigationHeader = ({ showButtons, onLogoHover, onLogoLeave, onButtonClick
                   ? "bg-gradient-to-r from-[#b8001f] to-[#7a0015] text-white"
                   : "bg-transparent text-gray-300 hover:text-white"
               }`}
-              onClick={() => onButtonClick(button === "students" ? "main-section" : "brands-section")}
+              onClick={() =>
+                onButtonClick(
+                  button === "students" ? "main-section" : "brands-section"
+                )
+              }
               onMouseEnter={() => onButtonHover(button)}
               onMouseLeave={() => onButtonHover("students")}
             >
@@ -622,7 +716,9 @@ const NavigationHeader = ({ showButtons, onLogoHover, onLogoLeave, onButtonClick
 // Content sections
 const ContentSection = ({ title, children, className = "" }) => (
   <div className={`text-center text-white ${className}`}>
-    <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold mb-2 text-white px-4">{title}</h1>
+    <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold mb-2 text-white px-4">
+      {title}
+    </h1>
     {children}
   </div>
 );
@@ -643,7 +739,10 @@ const AppStoreButtons = () => (
               fill="#ffcc02"
             />
             <path d="M15.39,12L6.05,2.66L16.81,8.88L15.39,12Z" fill="#ff6f00" />
-            <path d="M6.05,21.34L16.81,15.12L15.39,12L6.05,21.34Z" fill="#c23321" />
+            <path
+              d="M6.05,21.34L16.81,15.12L15.39,12L6.05,21.34Z"
+              fill="#c23321"
+            />
             <path
               d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.61 3,21.09 3,20.5Z"
               fill="#01875f"
@@ -656,12 +755,24 @@ const AppStoreButtons = () => (
         icon: (
           <svg viewBox="0 0 24 24" className="w-full h-full">
             <defs>
-              <linearGradient id="appStoreGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <linearGradient
+                id="appStoreGradient"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
                 <stop offset="0%" stopColor="#1e96fc" />
                 <stop offset="100%" stopColor="#0052d4" />
               </linearGradient>
             </defs>
-            <rect width="24" height="24" rx="5" ry="5" fill="url(#appStoreGradient)" />
+            <rect
+              width="24"
+              height="24"
+              rx="5"
+              ry="5"
+              fill="url(#appStoreGradient)"
+            />
             <path
               d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"
               fill="white"
@@ -703,8 +814,8 @@ const useScreenSize = () => {
     };
 
     checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   return isSmallScreen;
@@ -875,7 +986,11 @@ const StudentBeast = () => {
   );
 
   return (
-    <div ref={containerRef} className=" min-h-[95vh] relative overflow-hidden " id="beast">
+    <div
+      ref={containerRef}
+      className=" min-h-[95vh] relative overflow-hidden "
+      id="beast"
+    >
       {gradientBg}
 
       {/* Background Stickers */}
@@ -916,7 +1031,8 @@ const StudentBeast = () => {
           <div
             className="w-full h-0.5"
             style={{
-              background: "radial-gradient(circle, #b8001f 100%, #7a0015 0%, #7a0015 0%)",
+              background:
+                "radial-gradient(circle, #b8001f 100%, #7a0015 0%, #7a0015 0%)",
             }}
           />
           <div className="relative uppercase font-bold text-white">
@@ -950,7 +1066,7 @@ const StudentBeast = () => {
         {/* Responsive Carousel - 2D Marquee for small screens, 3D for larger screens */}
         <div
           ref={carouselRef}
-          className={`relative flex items-center justify-center px-4 md:px-4 ${
+          className={`relative flex items-center justify-center  md:px-4 ${
             isSmallScreen ? "mt-24" : "mt-2"
           }`}
         >
@@ -964,7 +1080,8 @@ const StudentBeast = () => {
         {/* Bottom Text Sections */}
         <div className="text-center px-4 md:px-6 pb-8 md:pb-12 mt-8 sm:mt-12">
           <p className="text-white text-base md:text-lg lg:text-xl xl:text-2xl leading-relaxed font-medium max-w-4xl mx-auto">
-            From oversized fits that scream confidence to punchlines that rep your vibe — this drop is all about you.
+            From oversized fits that scream confidence to punchlines that rep
+            your vibe — this drop is all about you.
           </p>
         </div>
       </div>
